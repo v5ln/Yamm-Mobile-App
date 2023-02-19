@@ -4,10 +4,10 @@ import 'package:lottie/lottie.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../config/themes/constants.dart';
 import '../view_models/loggedoff_viewmodel.dart';
-import 'widget/addspace_functions.dart';
+import 'widget/addspace_widget.dart';
 
 class LoggedOffScreen extends StatelessWidget {
-  LoggedOffViewModel viewModel =  LoggedOffViewModel();
+  LoggedOffViewModel viewModel = LoggedOffViewModel();
   LoggedOffScreen({Key? key}) : super(key: key);
 
   @override

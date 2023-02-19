@@ -1,16 +1,25 @@
+import 'dart:developer';
+
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:yammpay/providers/auth_provider.dart';
+import 'package:yammpay/providers/order_provider.dart';
+import 'package:yammpay/views/login_view.dart';
+import 'package:yammpay/views/select_items_view.dart';
+import 'package:yammpay/views/widget/snackbar_widget.dart';
 
 import '../config/themes/constants.dart';
-import 'widget/HomePage_Widgets.dart';
-import 'widget/addspace_functions.dart';
+import '../models/merchant.dart';
+import 'widget/HomePage_widgets.dart';
+import 'widget/addspace_widget.dart';
 import 'widget/button_widget.dart';
 
-
-String selectedStoreId = "1";
+String selectedStoreId = "";
+String selectedCountry = "+966";
 
 class FormScreen extends StatefulWidget {
   const FormScreen({Key? key}) : super(key: key);
@@ -21,36 +30,37 @@ class FormScreen extends StatefulWidget {
 
 class _FormScreenState extends State<FormScreen> {
   final _orderIdController = TextEditingController();
-  void _checkOrders(){
+  final _phoneNumberContoller = TextEditingController();
+  final _emailContoller = TextEditingController();
 
+  Future<void> _checkOrders() async {
+    var _orderProvider = Provider.of<OrderProvider>(context, listen: false);
+    await _orderProvider.postCheckOrder(_orderIdController.text,
+        email: _emailContoller.text,
+        phone_number: selectedCountry + _phoneNumberContoller.text);
+    if (_orderProvider.hasError) {
+      YammSnackBar.show(header: "Try Again", body: _orderProvider.errorMessage);
+      // showActionSnackBar(context, _orderProvider.errorMessage);
+    } else {
+      _orderProvider.order_number = _orderIdController.text;
+      // _orderProvider.store_id = selectedStoreId;
+      _orderProvider.items.clear();
+      _orderProvider.itemsId.clear();
+      Get.to(() => SelectItemsScreen());
+      // Navigator.pushNamed(context, SelectItemsScreen.id);
+    }
   }
-  //! 4596259160213
-  // Future<void> _checkOrders() async {
-  //   var _orderProvider = Provider.of<OrderProvider>(context, listen: false);
-  //   await _orderProvider.postCheckOrder(
-  //       _orderIdController.text, selectedStoreId);
-  //   if (_orderProvider.hasError) {
-  //     showActionSnackBar(context, _orderProvider.errorMessage);
-  //   } else {
-  //     _orderProvider.order_number = _orderIdController.text;
-  //     _orderProvider.store_id = selectedStoreId;
-  //     _orderProvider.items.clear();
-  //     _orderProvider.itemsId.clear();
-  //     Navigator.pushNamed(context, SelectItemsScreen.id);
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
-    // var _userProvider = Provider.of<AuthProvider>(context);
-    // var _orderProvider = Provider.of<OrderProvider>(context);
+    var _userProvider = Provider.of<AuthProvider>(context);
+    var _orderProvider = Provider.of<OrderProvider>(context);
 
     final formKey = GlobalKey<FormState>();
     return Scaffold(
       backgroundColor: Color(0xffBC9AFF),
       body: false
-          ?
-           const Center(child: null)
+          ? const Center(child: null)
           : Container(
               alignment: Alignment.topCenter,
               decoration: const BoxDecoration(
@@ -73,7 +83,7 @@ class _FormScreenState extends State<FormScreen> {
                   reverse: true,
                   child: Column(
                     children: [
-                      AppBarFormPageCustom( context),
+                      AppBarFormPageCustom(_userProvider,context),
                       Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: PADDING.w, vertical: 20.h),
@@ -113,7 +123,13 @@ class _FormScreenState extends State<FormScreen> {
                                     controller: _orderIdController,
                                   ),
                                   addVerticalSpace(10.h),
-                                  const EmailTextForm(),
+                                  _orderProvider.method == "email"
+                                      ? EmailTextForm(
+                                          controller: _emailContoller,
+                                        )
+                                      : PhoneTextForm(
+                                          controller: _phoneNumberContoller,
+                                        ),
                                   addVerticalSpace(15.h),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
@@ -146,18 +162,18 @@ class _FormScreenState extends State<FormScreen> {
     );
   }
 
-  Row AppBarFormPageCustom( BuildContext context) {
+  Row AppBarFormPageCustom(AuthProvider _userProvider,BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         const LogoWidget(imgPath: 'assets/images/logo_eng2.png'),
-        false
+        _userProvider.isLoggedIn
             ? IconButton(
                 icon: SvgPicture.asset(
                   'assets/icons/logout.svg',
                   color: COLOR_WHITE,
                 ),
-                onPressed: null,
+                onPressed: ()=>_userProvider.LogOff(),
               )
             : Expanded(
                 child: IconButton(
@@ -165,7 +181,9 @@ class _FormScreenState extends State<FormScreen> {
                     "Login",
                     style: kLangStyle,
                   ),
-                  onPressed: () => Navigator.pushNamed(context, "LoginScreen.id"),
+                  onPressed: () =>
+                      // Navigator.pushNamed(context, "LoginScreen.id"),
+                      Get.to(()=>LoginScreen())
                 ),
               ),
         if (false)
@@ -191,65 +209,68 @@ class StoresDropDowmMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   
-    // String? selectedStore;
-    return DropdownSearch<String>(
-      
-      mode: Mode.MENU,
-      showSelectedItems: true,
-      items: ["store1","store2","store3"],
-      showSearchBox: true,
-      // onChanged: (value) {
-      //   for (int i = 0; i < _orderProvider.stores.length; i++) {
-      //     if (value == _orderProvider.stores[i].name) {
-      //       selectedStoreId = _orderProvider.stores[i].id;
-      //       _orderProvider.chosenStore = _orderProvider.stores[i];
-      //       break;
-      //     }
-      //   }
-      // },
-      dropdownSearchDecoration: InputDecoration(
-        hintText: "Stores",
-        hintStyle: const TextStyle(color: COLOR_PURPLE),
-        prefixIcon: const Icon(
-          Icons.store,
-          color: COLOR_PURPLE,
+    var _orderProvider = Provider.of<OrderProvider>(context);
+    final List<String> items =
+        _orderProvider.stores.map((store) => store.name).toList();
+    return Theme(
+      data: ThemeData(
+          textTheme: TextTheme(subtitle1: TextStyle(color: COLOR_PURPLE))),
+      child: DropdownSearch(
+        mode: Mode.DIALOG,
+        items: items,
+        showSearchBox: true,
+        onChanged: (value) {
+          _orderProvider.chosenStore = _orderProvider.stores
+              .firstWhere((element) => element.name == value);
+          _orderProvider.switchVerfiyMethod();
+        },
+        showSelectedItems: true,
+        selectedItem: _orderProvider.selectedStoreName == ""
+            ? "Stores"
+            : _orderProvider.selectedStoreName,
+        dropdownSearchDecoration: InputDecoration(
+          hintText: "Stores",
+          hintStyle: const TextStyle(color: COLOR_PURPLE),
+          prefixIcon: const Icon(
+            Icons.store,
+            color: COLOR_PURPLE,
+          ),
+          border: InputBorder.none,
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: const BorderSide(color: COLOR_WHITE),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: const BorderSide(color: COLOR_WHITE),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: const BorderSide(color: COLOR_PINK, width: 3),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: const BorderSide(color: COLOR_PURPLE),
+          ),
+          filled: true,
+          fillColor: COLOR_WHITE,
+          errorStyle: TextStyle(
+              color: COLOR_YELLOW,
+              fontStyle: FontStyle.italic,
+              fontWeight: FontWeight.w500,
+              fontSize: 16.sp),
         ),
-        border: InputBorder.none,
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: const BorderSide(color: COLOR_WHITE),
+        searchFieldProps: const TextFieldProps(
+          cursorColor: COLOR_PURPLE,
         ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: const BorderSide(color: COLOR_WHITE),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: const BorderSide(color: COLOR_PINK, width: 3),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: const BorderSide(color: COLOR_PURPLE),
-        ),
-        filled: true,
-        fillColor: COLOR_WHITE,
-        errorStyle: TextStyle(
-            color: COLOR_YELLOW,
-            fontStyle: FontStyle.italic,
-            fontWeight: FontWeight.w500,
-            fontSize: 16.sp),
+        validator: (String? item) {
+          if (item == null) {
+            return "Please select a store";
+          } else {
+            return null;
+          }
+        },
       ),
-      searchFieldProps: const TextFieldProps(
-        cursorColor: COLOR_PURPLE,
-      ),
-      validator: (String? item) {
-        if (item == null) {
-          return "Please select a store";
-        } else {
-          return null;
-        }
-      },
     );
   }
 }
@@ -310,10 +331,130 @@ class OrderIdTextForm extends StatelessWidget {
   }
 }
 
+class PhoneTextForm extends StatefulWidget {
+  final TextEditingController controller;
+
+  PhoneTextForm({
+    super.key,
+    required this.controller,
+  });
+
+  @override
+  State<PhoneTextForm> createState() => _PhoneTextFormState();
+}
+
+class _PhoneTextFormState extends State<PhoneTextForm> {
+  var selectedDropDownValue = "🇸🇦 +966";
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          height: 55.h,
+          decoration: BoxDecoration(
+            color: COLOR_WHITE,
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          child: DropdownButton(
+            style: const TextStyle(color: COLOR_PURPLE),
+            dropdownColor: COLOR_WHITE,
+            // focusColor: COLOR_RED,
+            // iconEnabledColor: COLOR_RED,
+            underline: Text(""),
+
+            items: <String>['🇸🇦 +966', '🇦🇪 +972'].map((name) {
+              return DropdownMenuItem<String>(
+                value: name,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(name.removeAllWhitespace),
+                ),
+              );
+            }).toList(),
+            onChanged: ((newValue) {
+              setState(() {
+                selectedDropDownValue = newValue!;
+              });
+            }),
+
+            value: selectedDropDownValue,
+            isExpanded: false,
+          ),
+        ),
+        addHorizontalSpace(15),
+        Expanded(
+          child: TextFormField(
+            validator: (value) {
+              if (value!.isEmpty) {
+                return "Please enter your phone number";
+              } else if (!value!.isNumericOnly) {
+                return "Only numbers allowed";
+              } else if (value.length != 9) {
+                return "Number should be 9 figures";
+              } else {
+                return null;
+              }
+            },
+            controller: widget.controller,
+            keyboardType: TextInputType.phone,
+            decoration: InputDecoration(
+              hintText: "Phone Number",
+              hintStyle: const TextStyle(color: COLOR_PURPLE),
+              border: InputBorder.none,
+              prefixIcon: const Icon(
+                Icons.phone,
+                color: COLOR_PURPLE,
+              ),
+              suffixIcon: Tooltip(
+                message: 'Enter the same phone number used for this order',
+                triggerMode: TooltipTriggerMode.tap,
+                showDuration: const Duration(seconds: 4),
+                textStyle: TextStyle(
+                  color: COLOR_PINK,
+                  fontSize: 18.sp,
+                ),
+                decoration: const BoxDecoration(
+                  color: COLOR_WHITE,
+                ),
+                verticalOffset: 35,
+                child: Transform.scale(
+                  scale: 0.65,
+                  child: SvgPicture.asset(
+                    'assets/icons/question.svg',
+                    width: 16.w,
+                    color: COLOR_PURPLE,
+                  ),
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: const BorderSide(color: COLOR_WHITE),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: const BorderSide(color: COLOR_WHITE),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: const BorderSide(color: COLOR_PINK, width: 3),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: const BorderSide(color: COLOR_WHITE),
+              ),
+              filled: true,
+              fillColor: COLOR_WHITE,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class EmailTextForm extends StatelessWidget {
-  const EmailTextForm({
-    Key? key,
-  }) : super(key: key);
+  final TextEditingController controller;
+  const EmailTextForm({Key? key, required this.controller}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

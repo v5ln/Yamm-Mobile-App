@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../config/themes/constants.dart';
-import 'HomePage_Widgets.dart';
-
+import 'HomePage_widgets.dart';
 
 class PageLayout extends StatelessWidget {
   final Widget child;

@@ -9,7 +9,7 @@ class NavBarViewModel {
   final screens = [
     OrderView(),
     FormScreen(),
-    SettingsView()
+    // SettingsView()
     // OrderView(),
     // const FormScreen(),
     // const SettingsScreen(),

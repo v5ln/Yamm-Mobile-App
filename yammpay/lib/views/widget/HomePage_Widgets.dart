@@ -29,9 +29,7 @@ class ChangeLangWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () async {
-        
-      },
+      onPressed: () async {},
       child: Text("العربية", style: kLangStyle),
     );
   }

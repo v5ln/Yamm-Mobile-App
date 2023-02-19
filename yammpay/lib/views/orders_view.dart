@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:yammpay/providers/auth_provider.dart';
+import 'package:yammpay/providers/order_provider.dart';
+import 'package:yammpay/views/order_details_widget.dart';
 
 import '../config/themes/constants.dart';
-import 'widget/addspace_functions.dart';
+import 'widget/addspace_widget.dart';
 import 'widget/page_layout_widget.dart';
 import 'widget/page_title_widget.dart';
 import 'loggedoff_view.dart';
-
 
 class OrderView extends StatefulWidget {
   const OrderView({Key? key}) : super(key: key);
@@ -20,14 +22,14 @@ class OrderView extends StatefulWidget {
 class _OrderViewState extends State<OrderView> {
   @override
   Widget build(BuildContext context) {
-   
-
+    var _userProvider = Provider.of<AuthProvider>(context);
+    var _orderProvider = Provider.of<OrderProvider>(context);
     return DefaultTabController(
       length: 2,
       child: PageLayout(
-        child: true
+        child: _userProvider.isLoggedIn
             ? Column(children: [
-                PageTitle(title: "Orders"),
+                const PageTitle(title: "Orders"),
                 Padding(
                   padding: EdgeInsets.all(PADDING),
                   child: Container(
@@ -54,9 +56,9 @@ class _OrderViewState extends State<OrderView> {
                                 color: COLOR_PURPLE.withOpacity(0.4), width: 3),
                             borderRadius: BorderRadius.circular(25.r),
                           ),
-                          tabs: [
+                          tabs: const [
                             Tab(
-                              text:"Pending",
+                              text: "Pending",
                             ),
                             Tab(
                               text: "Completed",
@@ -67,20 +69,20 @@ class _OrderViewState extends State<OrderView> {
                 ),
                 Expanded(
                   child: TabBarView(children: [
-                    true
+                     _orderProvider.pastOrders.isEmpty
                         ? Center(
                             child: Text(
                             'You Do not Have Any Orders Yet :(',
                             style: TextStyle(
                                 fontSize: 24.sp, fontWeight: FontWeight.bold),
                           ))
-                        :  LoggedOffScreen(),
-                     LoggedOffScreen(),
+                        : PendingOrdersList(),
+                    CompletedOrdersList(),
                   ]),
                 ),
                 addVerticalSpace(10.h),
               ])
-            :  LoggedOffScreen(),
+            : LoggedOffScreen(),
       ),
     );
   }

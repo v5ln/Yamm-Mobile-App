@@ -27,7 +27,7 @@ import 'package:yammpay/views/navbar_view.dart';
 Route<dynamic>? routes(routeSettings) {
   switch (routeSettings.name) {
     case "nav":
-       return MaterialPageRoute(builder: (context) => const NavHolderScreen());
+      return MaterialPageRoute(builder: (context) => const NavHolderScreen());
     default:
   }
   // if (routeSettings.name == NavHolderScreen.id) {
