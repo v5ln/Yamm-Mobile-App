@@ -1,0 +1,79 @@
+{
+    "language_chooser": "English",
+    "homepage_bigtitle": "أسرع طريقة لاسترداد أموالك من المتاجر الالكترونية!",
+    "homepage_subtitle": "تقدم بطلب استرداد",
+    "stores_field": "المتاجر",
+    "orderid_field": "رقم الطلب",
+    "email_field": "الإيميل",
+    "continue_button": "اكمال",
+
+
+    "settings_title": "الاعدادات",
+    "phonenumber_title": "رقم الجوال",
+    "mycards_title": "بطاقاتي",
+    "myaddresses_title": "عنواني",
+    "termsandconditions_title": "الاحكام والشروط",
+    "faq_title": "اسئلة واجوبة",
+    "privacy_title": "سياسة الخصوصية",
+    "contactus_title": "تواصل معنا",
+    "whosus_title": "من هم يمّ؟",
+    "aboutus_title": "عنا",
+
+    "credit_number": "رقم البطاقة",
+    "firstname": "الاسم الاول",
+    "secondname": "الاسم الثاني (اختياري)",
+    "lastname": "اسم العائلة",
+
+     "address_street": "اسم الشارع",
+    "address_city": "المدينة",
+    "address_province": "المنطقة",
+    "address_zip": "الرمز البريدي",
+
+
+    "order_number_title": "رقم الطلب:",
+    "choose_items_title": "اختر ماتريد ارجاعه", 
+    "refund_subtotal_title": "المبلغ المسترجع",
+    "fee_deduction_title": "خصم الغرامة",
+    "total_title": "المجموع",
+    "not_refundable": " لايمكن ارجاع هذا المنتج!",
+
+
+    "orders_title": "الطلبات",
+    "pending_title": "قيد الانتظار",
+    "completed_title": "انتهت",
+    "status_title": "الحالة",
+
+
+    "forms_error_string": "❗ الرجاء تعبة الخانة",
+     "order_number_empty_string": "❗ الرجاء ادخال رقم الطلب الصحيح",
+    "store_empty_string": "❗ اختر احد المتاجر",
+    "email_empty_string": "❗ الرجاء ادخال بريد الكتروني صحيح",
+
+    "login_title": "تسجيل دخول",
+    "enter_your_number_title": "أدخل رقم جوالك",
+    "enter_your_number_subtitle" : " ادخل رقم جوالك لإرسال رمز التحقق",
+    "otp_verfication_title" : "رمز التحقق",
+    "otp_verfication_subtitle": "يجب عليك ادخال رمز التحقق الذي ارسل إليك عبر الرسائل النصية للرقم:",
+    "absher_verfication_title": "التحقق من هويتك عبر ابشر",
+    "absher_verfication_subtitle": "ادخل رقم الهوية الوطنية ويوم ميلادك للتحقق من هويتك",
+    "absher_otp_verfication_title": "تأكيد هويتك",
+    "absher_otp_verfication_subtitle": "ادخل رمز التحقق اللذي ارسل اليك عبر الرسائل النصية من اجل التحقق من هويتك",
+    "digital_agreement_title": "قبول شروط التسجيل",
+    "digital_agreement_accept_title": "اوافق على كل القوانين واتحمل مسؤولية مخالفتها",
+    "register_success_title": "هنيئًا! لقد تم تسجيل حسابك بنجاح!",
+    "register_success_subtitle": "لقد تم تسجيل حسابك بنجاح وتستطيع الان الاستفادة من جميع خدمات يمّ",
+        "resend_code_title": "اعادة ارسال رمز التحقق",
+
+
+   
+    "yamm_title": "يــــمّ",
+
+
+    "save_title": "حفظ",
+    "gotit_title": "حسنًا!",
+    "next_title": "التالي",
+    "accept_title": "اقبل"
+
+
+    
+}

@@ -1,0 +1,102 @@
+{
+    "language_chooser": "العربية",
+    "@language_chooser": {
+        "description": "Choose language"
+    },
+    "homepage_bigtitle": "The fastest way to get your refund from the stores!",
+    "homepage_subtitle": "Apply for a Refund",
+     "stores_field": "Stores",
+     "orderid_field": "Order Number",
+     "email_field": "Email",
+     "continue_button": "Continue",
+
+
+    "settings_title": "Settings",
+    "@settings_title": {
+        "description": "Setting page"
+    },
+    "phonenumber_title": "Phone Number",
+    "mycards_title": "My Cards",
+    "myaddresses_title": "My Addresses",
+    "termsandconditions_title": "Terms and Conditions",
+    "faq_title": "FAQ",
+    "privacy_title": "Privacy Pollicy",
+    "contactus_title": "Contact Us",
+    "whosus_title": "Who's Yamm?",
+    "aboutus_title": "About Us",
+
+    "credit_number": "Credit Number",
+    "firstname": "First Name",
+    "secondname": "Second Name",
+    "lastname": "Last Name",
+
+    "address_street": "Street Name",
+    "address_city": "City",
+    "address_province": "Province",
+    "address_zip": "Zip Code",
+
+
+    "select_items_title": "Item Details",
+    "@select_items_title": {
+        "description": "Select Items page"
+    },
+    "order_number_title": "Order Number: ",
+    "choose_items_title": "Select items to return ", 
+    "refund_subtotal_title": "Refund Subtotal",
+    "fee_deduction_title": "Fee Deduction",
+    "total_title": "Total",
+    "not_refundable": "THIS ITEM IS NOT REFUNDABLE",
+
+
+
+
+
+    "orders_title": "Orders",
+    "@orders_title": {
+        "description": "Pending and completed orders page"
+    },
+    "pending_title": "Pending",
+    "completed_title": "Completed",
+    "status_title": "Status",
+
+
+    "forms_error_string": "Required field",
+    "@orders_title": {
+        "description": "Error messages strings"
+    },
+    "order_number_empty_string": "❗ Please enter order number",
+    "store_empty_string": "❗ Please select a store",
+    "email_empty_string": "❗ Please enter a valid email",
+
+
+    "enter_your_number_title": "Enter your number",
+    "@select_items_title": {
+        "description": "Login/sign up elements"
+    },
+    "login_title": "Login",
+    "enter_your_number_subtitle": "Enter your number to send an OTP verfication code ",
+    "otp_verfication_title": "OTP Verfication",
+    "otp_verfication_subtitle": "You have to enter an OTP code we sent via SMS to your phone number ",
+    "absher_verfication_title": "Abser Verfication",
+    "absher_verfication_subtitle": "Enter your national ID or Iqamah, and your birth date to verify your idenity",
+    "absher_otp_verfication_title": "Absher Verfication",
+    "absher_otp_verfication_subtitle": "Enter the Absher OTP you recieved via SMS to your phone number: ",
+    "digital_agreement_title": "Digital Legal Agreement",
+    "digital_agreement_accept_title": "I agree with all of the digital Legal Acceptance rules",
+    "register_success_title": "Account Successfully create",
+    "register_success_subtitle": "Congratulation! Your account has been successfully created",
+    "resend_code_title": "Resend code",
+
+
+    "yamm_title": "yamm",
+
+
+
+    "save_title": "Save",
+    "gotit_title" :"Got it!",
+    "next_title": "Next",
+    "accept_title":"Accept"
+
+    
+
+}
